@@ -27,6 +27,7 @@ On Ubuntu: `sudo apt-get install monit`
 Example config file:
 
 ```
+# /etc/monit/conf.d/newrelic_memcached_agent.conf
 check process newrelic_memcached_agent
   with pidfile /home/ubuntu/newrelic_memacached_agent/newrelic_memcached_agent.pid
   start program = "/bin/su - ubuntu -c '/home/ubuntu/newrelic_memcached_agent/newrelic_memcached_agent.daemon start'" with timeout 90 seconds
