@@ -26,6 +26,23 @@ Running the Agent
 1. Wait a few minutes for New Relic to begin processing the data sent from your agent.
 1. Log into your New Relic account at [http://newrelic.com](http://newrelic.com) and click on `Memcached` on the left hand nav bar to start seeing your Memcached metrics
 
+Using Monit to keep the Agent running
+-------------------------------------
+
+On Ubuntu: `sudo apt-get install monit`
+
+Example config file:
+
+```
+# /etc/monit/conf.d/newrelic_memcached_agent.conf
+check process newrelic_memcached_agent
+  with pidfile /home/ubuntu/newrelic_memacached_agent/newrelic_memcached_agent.pid
+  start program = "/bin/su - ubuntu -c '/home/ubuntu/newrelic_memcached_agent/newrelic_memcached_agent.daemon start'" with timeout 90 seconds
+  stop program = "/bin/su - ubuntu -c '/home/ubuntu/newrelic_memcached_agent/newrelic_memcached_agent.daemon stop'" with timeout 90 seconds
+  if totalmem is greater than 250 MB for 2 cycles then restart
+  group newrelic_agent
+```
+
 Source Code
 -----------
 
