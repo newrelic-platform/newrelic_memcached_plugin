@@ -39,7 +39,7 @@ module MemcachedAgent
   class Agent < NewRelic::Plugin::Agent::Base
     agent_guid "com.newrelic.plugins.memcached.ruby"
     agent_version "1.0.1"
-    agent_config_options :endpoint,:port,:name
+    agent_config_options :endpoint,:port,:name,:username,:password
     agent_human_labels("Memcached") { "#{name}" }
 
     def setup_metrics
@@ -67,8 +67,11 @@ module MemcachedAgent
       @reclaimed = NewRelic::Processor::EpochCounter.new
     end
     def poll_cycle
+      options = {}
+      options[:username] = self.username if (self.username && self.password)
+      options[:password] = self.password if (self.username && self.password)
       hostname_and_port = "#{self.endpoint}:#{self.port||11211}"
-      stats = Dalli::Client.new(hostname_and_port).stats[hostname_and_port]
+      stats = Dalli::Client.new(hostname_and_port, options).stats[hostname_and_port]
 
       # System metrics
       report_metric "System/CPU/User", "seconds", @rusage_user.process(stats["rusage_user"])
