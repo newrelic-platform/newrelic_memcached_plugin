@@ -31,3 +31,5 @@ agents:
    -
      name: "Our Memcache Instance"
      endpoint: "hostname"
+     # username: "memcache"
+     # password: "changeme"
