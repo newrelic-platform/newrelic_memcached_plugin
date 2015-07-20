@@ -75,7 +75,7 @@ module MemcachedAgent
       report_metric "System/CPU/System", "seconds", @rusage_system.process(stats["rusage_system"])
 
       bytesUsed = stats["bytes"].to_f
-      bytesAvailable = stats["limit_maxbytes"].to_f
+      bytesAvailable = stats.fetch("limit_maxbytes", stats["engine_maxbytes"]).to_f
       report_metric "System/Summary/Memory/Bytes/Used", "bytes", bytesUsed
       report_metric "System/Summary/Memory/Bytes/MaxAvailable", "bytes", bytesAvailable
       report_metric "System/Summary/Memory/Percent", "percent", (bytesUsed / bytesAvailable) * 100
